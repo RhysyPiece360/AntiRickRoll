@@ -1,25 +1,54 @@
-import blockedIds from './blockedIds.js';
-
 (() => {
-    // We grab the storage every time in case an id gets added while we're browsing (futureproofing)
-    const checkLink = () => chrome.storage.local.get(['bypassed', 'totalRickRolls', 'extDisabled'], res => {
-        // Check if blocking is enabled and if url in blocked links
-        if (!res.extDisabled && blockedIds.find(i => location.href.includes(i))) {
-            // If not bypassed (user clicked continue), show warning page
-            if (!res.bypassed) {
-                // Update total rickrolls blocked counter
-                chrome.storage.local.set({ totalRickRolls: (res.totalRickRolls ?? 0) + 1 })
+    // Function to extract YouTube video ID from URL
+    const extractVideoId = (url) => {
+        const urlObj = new URL(url);
+        return urlObj.searchParams.get('v');
+    };
 
-                location.replace(chrome.runtime.getURL('warn/warn.html') + '?' + location.href);
-            } else {
-                chrome.storage.local.set({ bypassed: false })
+    // Function to send a request to the server to check if the URL is blocked
+    const checkLinkWithServer = (url) => {
+        const serverURL = 'http://localhost:80/checkBlockedURL';
+        const videoId = extractVideoId(url);
+        const data = { url: videoId };
+
+        fetch(serverURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.isBlocked) {
+                // If not bypassed (user clicked continue), show warning page
+                chrome.storage.local.get(['bypassed'], res => {
+                    if (!res.bypassed) {
+                        chrome.storage.local.get(['totalRickRolls'], res => {
+                            chrome.storage.local.set({ totalRickRolls: (res.totalRickRolls ?? 0) + 1 });
+                        });
+                        location.replace(chrome.runtime.getURL('warn/warn.html') + '?' + url);
+                    } else {
+                        chrome.storage.local.set({ bypassed: false });
+                    }
+                });
             }
-        }
-    });
+        })
+        .catch(error => {
+            // If the server is not responding or returns an error, proceed as if the URL is not blocked
+            console.error('Error checking blocked URL:', error);
+        });
+    };
+
+    // Get the current URL
+    const currentUrl = window.location.href;
 
     // Make sure we're not already on a blocked link
-    checkLink();
+    checkLinkWithServer(currentUrl);
 
     // Hook into youtube navigation event
-    addEventListener('yt-navigate-start', checkLink);
+    addEventListener('yt-navigate-start', () => {
+        const newUrl = window.location.href;
+        checkLinkWithServer(newUrl);
+    });
 })();

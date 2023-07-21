@@ -7,6 +7,7 @@
     import Rickrolldb from "./pages/rickrolldb.svelte";
     import Settings from "./pages/settings.svelte";
     import Stats from "./pages/stats.svelte";
+    import Approve from './pages/approve.svelte';
     import { fade } from "svelte/transition";
 
     const fadeOptions = {
@@ -33,6 +34,10 @@
         {:else if $page === 3}
             <div in:fade={fadeOptions}>
                 <Settings />
+            </div>
+            {:else if $page === 4}
+            <div in:fade={fadeOptions}>
+                <Approve />
             </div>
         {/if}
     </div>
