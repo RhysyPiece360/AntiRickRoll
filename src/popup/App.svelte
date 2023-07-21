@@ -7,14 +7,13 @@
     import Rickrolldb from "./pages/rickrolldb.svelte";
     import Settings from "./pages/settings.svelte";
     import Stats from "./pages/stats.svelte";
-    import Approve from './pages/approve.svelte';
+    import ApproveVideos from "./pages/approve.svelte"; // Add this line
     import { fade } from "svelte/transition";
 
     const fadeOptions = {
         duration: 200,
     };
 </script>
-
 <div class="max-w-fit">
     <Header />
 
@@ -35,9 +34,9 @@
             <div in:fade={fadeOptions}>
                 <Settings />
             </div>
-            {:else if $page === 4}
+        {:else if $page === 4} <!-- Add this block -->
             <div in:fade={fadeOptions}>
-                <Approve />
+                <ApproveVideos />
             </div>
         {/if}
     </div>

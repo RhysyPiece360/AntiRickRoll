@@ -4,6 +4,7 @@
         faChartBar,
         faServer,
         faCog,
+        faCheckCircle, // Add this line
     } from "@fortawesome/free-solid-svg-icons";
 
     import NavIcon from "./nav-icon.svelte";
@@ -14,4 +15,5 @@
     <NavIcon target={1} icon={faChartBar} disabled title="Stats" />
     <NavIcon target={2} icon={faServer} disabled title="RickRolldb" />
     <NavIcon target={3} icon={faCog} disabled title="Settings" />
+    <NavIcon target={4} icon={faCheckCircle} title="Approve Videos" /> <!-- Add this line -->
 </div>
