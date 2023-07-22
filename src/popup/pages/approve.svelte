@@ -89,7 +89,8 @@
     <h1>Videos in Queue</h1>
     {#each videos as video (video.id)}
         <div>
-            <iframe src="https://www.youtube.com/watch?v={video.id}" title="Video checking"></iframe> 
+            <p>currently youtube refuses iframes so i </p>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/{video.id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>            
             <Button color="success" on:click={() => approveVideo(video.id)}>Approve</Button>
             <Button color="danger" on:click={() => disapproveVideo(video.id)}>Disapprove</Button>
         </div>
