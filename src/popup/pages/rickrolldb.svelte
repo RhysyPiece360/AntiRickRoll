@@ -60,5 +60,4 @@
     <p>Add Youtube Url Here (must be 11 characters or it wont accept it)</p>
     <Input bind:value={videoId} placeholder="Enter YouTube video ID" />
     <Button color="primary" class="mt-2" on:click={submitVideoId}>Submit</Button>
-    <Button color="secondary" class="mt-2 ml-2" on:click={approveVideoId}>Approve</Button>
 </div>
