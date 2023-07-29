@@ -83,16 +83,27 @@
             console.error('Error disapproving video ID:', error);
         });
     };
-</script>
+    let active = false;
 
+</script>
+<style>
+	.active {
+		background-color: pink;
+        text-align: center;
+	}
+</style>
 <div class="mt-4">
+    
     <h1>Videos in Queue</h1>
     {#each videos as video (video.id)}
         <div>
             <p>currently youtube refuses iframes so i </p>
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/{video.id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>            
-            <Button color="success" on:click={() => approveVideo(video.id)}>Approve</Button>
+                <div class:active={active}>
+
+                <Button color="success" on:click={() => approveVideo(video.id)}>Approve</Button>
             <Button color="danger" on:click={() => disapproveVideo(video.id)}>Disapprove</Button>
+        </div>
         </div>
     {/each}
 </div>
